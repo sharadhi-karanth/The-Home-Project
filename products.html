@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Available Products</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .products-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 20px;
+        }
+
+        .product-link {
+
+            text-decoration: none;
+
+            color: inherit;
+        }
+
+        .product-card {
+
+            background-color: #fff;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 2px 8px rgba(0, 0, 0, 0.1);
+
+            transition: transform 0.2s;
+
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+
+            transform: scale(1.02);
+        }
+
+        .product-card img {
+
+            width: 100%;
+
+            height: 200px;
+
+            object-fit: cover;
+        }
+
+        .product-info {
+
+            padding: 15px;
+        }
+
+        .product-info h2 {
+
+            font-size: 20px;
+
+            margin: 10px 0;
+        }
+
+        .product-info p {
+
+            font-size: 14px;
+
+            color: #555;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <h1>Products in Store</h1>
+
+
+    <div class="products-grid">
+
+
+        <!-- ========================= -->
+        <!-- ARECA NUT -->
+        <!-- ========================= -->
+
+        <a href="productsinone.html?product=areca"
+           class="product-link">
+
+            <div class="product-card">
+
+                <img
+                    src="images/boiled-areca-nut.jpg"
+                    alt="Areca Nut"
+                >
+
+                <div class="product-info">
+
+                    <h2 id="arecaName">
+                        Areca Nut (Adike)
+                    </h2>
+
+                    <p id="arecaStock">
+                        Loading stock...
+                    </p>
+
+                    <p id="arecaPrice">
+                        Loading price...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- ========================= -->
+        <!-- PADDY -->
+        <!-- ========================= -->
+
+        <a href="productsinone.html?product=paddy"
+           class="product-link">
+
+            <div class="product-card">
+
+                <img
+                    src="images/pile-red-rice-uncooked-isolated-260nw-1090723364.webp"
+                    alt="Paddy"
+                >
+
+                <div class="product-info">
+
+                    <h2 id="paddyName">
+                        Paddy (Akki)
+                    </h2>
+
+                    <p id="paddyStock">
+                        Loading stock...
+                    </p>
+
+                    <p id="paddyPrice">
+                        Loading price...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </a>
+
+
+
+        <!-- ========================= -->
+        <!-- COCONUT -->
+        <!-- ========================= -->
+
+        <a href="productsinone.html?product=coconut"
+           class="product-link">
+
+            <div class="product-card">
+
+                <img
+                    src="images/Sure_ways_to_keep_the_coconut_tree_healthy.jpg"
+                    alt="Coconut"
+                >
+
+                <div class="product-info">
+
+                    <h2 id="coconutName">
+                        Coconut (Tengina Kai)
+                    </h2>
+
+                    <p id="coconutStock">
+                        Loading stock...
+                    </p>
+
+                    <p id="coconutPrice">
+                        Loading price...
+                    </p>
+
+                </div>
+
+            </div>
+
+        </a>
+
+
+    </div>
+
+
+<script>
+
+/* =====================================================
+   PRODUCT IMAGES / URL IDs
+   ===================================================== */
+
+const productIDs = {
+
+    "Areca Nut (Adike)": "areca",
+
+    "Paddy (Akki)": "paddy",
+
+    "Coconut (Tengina Kai)": "coconut"
+
+};
+
+
+/* =====================================================
+   LOAD PRODUCTS FROM NODE.JS
+   ===================================================== */
+
+async function loadProducts() {
+
+    try {
+
+        const response =
+            await fetch("http://localhost:3000/products");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to fetch products"
+            );
+
+        }
+
+
+        const products =
+            await response.json();
+
+
+        /* =============================================
+           DISPLAY EACH PRODUCT
+           ============================================= */
+
+        products.forEach(product => {
+
+
+            const id =
+                productIDs[product.ProductName];
+
+
+            if (!id) {
+
+                return;
+
+            }
+
+
+            /* =========================================
+               NAME
+               ========================================= */
+
+            document.getElementById(
+                id + "Name"
+            ).textContent =
+                product.ProductName;
+
+
+            /* =========================================
+               STOCK
+               ========================================= */
+
+            let stockText;
+
+
+            if (product.Unit === "kg") {
+
+                stockText =
+                    "Stock : "
+                    + product.Stock
+                    + " kg";
+
+            }
+
+            else {
+
+                stockText =
+                    "Stock : "
+                    + product.Stock
+                    + " pieces";
+
+            }
+
+
+            document.getElementById(
+                id + "Stock"
+            ).textContent =
+                stockText;
+
+
+            /* =========================================
+               PRICE
+               ========================================= */
+
+            let priceText;
+
+
+            if (product.Unit === "kg") {
+
+                priceText =
+                    "Price per kg : INR "
+                    + product.Price;
+
+            }
+
+            else {
+
+                priceText =
+                    "Price per piece : INR "
+                    + product.Price;
+
+            }
+
+
+            document.getElementById(
+                id + "Price"
+            ).textContent =
+                priceText;
+
+
+        });
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Error loading products:",
+            error
+        );
+
+
+        document.querySelector(
+            ".products-grid"
+        ).innerHTML = `
+
+            <p style="
+                text-align:center;
+                font-size:18px;
+                color:red;
+                grid-column:1/-1;
+            ">
+
+                Unable to load products.
+
+                <br>
+
+                Please make sure the backend
+                server is running.
+
+            </p>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   START
+   ===================================================== */
+
+loadProducts();
+
+</script>
+
+
+</body>
+
+</html>
